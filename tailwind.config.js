@@ -1,13 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./public/**/*.html',],
-  theme: {
-    extend: {},
-  },
-  plugins: [require('@tailwindcss/typography'),
-    require('daisyui'),],
-  daisyui: {
-      themes: ["fantasy"],  
-    }
+  content: [`./views/**/*.ejs`], // updateed to all .ejs files in the views folder
+  theme: { extend: {}, },
+  plugins: [require('@tailwindcss/typography'), require('daisyui')],
+  daisyui: { themes: ['cupcake'], },
 }
-
