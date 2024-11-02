@@ -61,5 +61,5 @@ app.use((req, res) => {
 });
 
 legoData.initialize().then(()=>{
-  app.listen(HTTP_PORT, () => { console.log(`Server is running at http://localhost:${HTTP_PORT}`) });
+  app.listen(HTTP_PORT, () => { console.log(`server listening on: ${HTTP_PORT}`) });
 });
