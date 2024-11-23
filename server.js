@@ -14,32 +14,44 @@
 require('dotenv').config();
 const legoData = require("./modules/legoSets");
 const path = require("path");
+
 const express = require('express');
 const app = express();
+
 const HTTP_PORT = process.env.PORT || 8080;
-app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
 app.get('/', (req, res) => {
   res.render("home", { page: '/' }); // Make sure 'page' is set correctly
 });
+
+
 app.get('/about', (req, res) => {
   res.render("about");
 });
+
 app.get("/lego/sets", async (req,res)=>{
+
   let sets = [];
-  try{    
+
+  try{
     if(req.query.theme){
       sets = await legoData.getSetsByTheme(req.query.theme);
     }else{
       sets = await legoData.getAllSets();
     }
+
     res.render("sets", {sets})
   }catch(err){
     res.status(404).render("404", {message: err});
   }
-  
+
 });
+
 app.get("/lego/sets/:num", async (req,res)=>{
   try{
     let set = await legoData.getSetByNum(req.params.num);
@@ -48,6 +60,7 @@ app.get("/lego/sets/:num", async (req,res)=>{
     res.status(404).render("404", {message: err});
   }
 });
+
 app.get('/lego/addSet', async (req, res) => {
   try {
     const themes = await legoData.getAllThemes();
@@ -56,8 +69,10 @@ app.get('/lego/addSet', async (req, res) => {
     res.status(500).render("500", { message: `Error retrieving themes: ${err}` });
   }
 });
+
 app.post('/lego/addSet', async (req, res) => {
   console.log(req.body);  // Log the form data received
+
   try {
     const newSetData = {
       set_num: req.body.set_num,  // Ensure you include this field to match your database requirement
@@ -74,6 +89,8 @@ app.post('/lego/addSet', async (req, res) => {
     res.status(500).render('500', { message: `Error adding set: ${error.message}` });
   }
 });
+
+
 app.get("/lego/editSet/:num", async (req, res) => {
   try {
     const set = await legoData.getSetByNum(req.params.num);
@@ -86,6 +103,7 @@ app.get("/lego/editSet/:num", async (req, res) => {
     res.status(404).render("404", { message: err });
   }
 });
+
 app.post("/lego/editSet", async (req, res) => {
   console.log(req.body);  // Log to confirm all data is received correctly
   try {
@@ -99,6 +117,7 @@ app.post("/lego/editSet", async (req, res) => {
     res.status(500).render('500', { message: `Error updating set: ${err.message}` });
   }
 });
+
 app.get("/lego/deleteSet/:num", async (req, res) => {
   try {
     await legoData.deleteSet(req.params.num);
@@ -108,9 +127,11 @@ app.get("/lego/deleteSet/:num", async (req, res) => {
     res.status(500).render('500', { message: `Error deleting set: ${err.message}` });
   }
 });
+
 app.use((req, res, next) => {
   res.status(404).render("404", {message: "I'm sorry, we're unable to find what you're looking for"});
 });
+
 legoData.initialize().then(()=>{
   app.listen(HTTP_PORT, () => { console.log(`server listening on: ${HTTP_PORT}`) });
 });
