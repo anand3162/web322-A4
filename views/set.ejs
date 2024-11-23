@@ -1,60 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cupcake">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= set.name %> - Lego Set Details</title>
+    <link href="/css/main.css" rel="stylesheet" />
+  </head>
+  <body class="bg-base-100 text-base-content">
+    <!-- Updated Navbar -->
+    <%- include('./partials/navbar', { page: 'sets' }) %>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About</title>
-  <link rel="stylesheet" href="/css/main.css" />
-  <script>
-    document.addEventListener("DOMContentLoaded", async () => {
-        let res = await fetch("https://quotable.io/random");
-        let data = await res.json();
-        document.getElementById("quote").innerHTML=`"${data.content}"<br />- <em>${data.author}</em>`;
-    });
-  </script>
-</head>
+    <!-- Hero Section -->
+    <div class="hero bg-base-200 rounded-lg p-6 mb-8">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <h1 class="text-5xl font-bold"><%= set.name %></h1>
+          <p class="py-4">
+            Here are the details for the Lego set:
+            <strong><%= set.name %></strong>.
+          </p>
+        </div>
+      </div>
+    </div>
 
-<body tabindex="-1">
-    <%- include('partials/navbar', {page: '/lego/set'}) %>
+    <!-- Set Details -->
+    <div class="container mx-auto p-6">
+      <div class="card bg-base-200 shadow-lg">
+        <figure class="p-6">
+          <img
+            src="<%= set.img_url %>"
+            alt="Image of <%= set.name %>"
+            class="w-48 h-48 object-cover mx-auto rounded-lg"
+          />
+        </figure>
+        <div class="card-body text-center">
+          <h2 class="card-title"><%= set.name %></h2>
+          <p><strong>Year:</strong> <%= set.year %></p>
+          <p><strong>Theme:</strong> <%= set.theme %></p>
+          <p><strong>Number of Parts:</strong> <%= set.num_parts %></p>
 
-    <div class="container mx-auto p-4">
-      <div class="hero bg-base-200 rounded-lg p-6">
-        <div class="hero-content text-center ">
-          <div class="max-w-md">
-            <h1 class="text-5xl font-bold"><%= set.name %></h1>
-  
-            <p class="py-6">Below, you will find detailed information about the set: <%= set.name %></p>
-  
+          <!-- Action Buttons -->
+          <div class="card-actions justify-center mt-4">
+            <!-- Edit Button -->
+            <a href="/lego/editSet/<%= set.set_num %>" class="btn btn-success">
+              Edit
+            </a>
+            <!-- Delete Button -->
+            <a href="/lego/deleteSet/<%= set.set_num %>" class="btn btn-error">
+              Delete
+            </a>
           </div>
         </div>
       </div>
-  
-      <br />
-  
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <img class="w-full rounded-lg"
-            src="<%= set.img_url %>"
-            alt=" Set Image" />
-  
-        </div>
-        <div class="prose">
-  
-         <p>
-          <span class="font-bold">Set Name: </span> <%= set.name %> <br />
-          <span class="font-bold">Year Released: </span> <%= set.year %> <br />
-          <span class="font-bold">Theme: </span> <%= set.theme %> <br />
-          <span class="font-bold">Number of Parts: </span> <%= set.num_parts == 0 ? 'Unknown' : set.num_parts %> <br /><br />
-  
-          <span id="quote"></span>
-          <br /><br />
-          <a class="btn btn-primary btn-sm" href="#" onclick="history.back(); return false;">RETURN</a>
-         </p>
-  
-        </div>
-  
-      </div>
-  
+    </div>
+
+    <!-- Go Back Button -->
+    <div class="text-center mt-8">
+      <a
+        href="#"
+        onclick="history.back(); return false;"
+        class="btn btn-primary"
+      >
+        Go Back
+      </a>
     </div>
   </body>
+</html>
